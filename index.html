@@ -4,132 +4,49 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>경주정보고 포털 — 학교 도구 모음</title>
-  <style>
-    :root{--bg:#f5f7fb;--card:#fff;--accent:#1f6feb;--muted:#6b7280}
-    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans KR","Helvetica Neue",Arial;color:#111;background:var(--bg)}
-    header{background:linear-gradient(90deg,#0f172a,var(--accent));color:#fff;padding:18px 20px}
-    header h1{margin:0;font-size:1.05rem}
-    .container{max-width:1000px;margin:20px auto;padding:0 16px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-    .card{background:var(--card);border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:8px}
-    .card h3{margin:0;font-size:1rem}
-    .card p{margin:0;color:var(--muted);font-size:.92rem}
-    .buttons{display:flex;gap:8px;margin-top:8px}
-    button{border:0;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600}
-    .open-portal{background:#e6f0ff;color:var(--accent)}
-    .open-tab{background:var(--accent);color:#fff}
-    .footer{margin:18px 0;color:var(--muted);font-size:.88rem}
-    /* iframe panel */
-    .panel{position:fixed;right:20px;bottom:20px;width:min(920px,90%);height:66vh;background:var(--card);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);overflow:hidden;display:none;flex-direction:column;z-index:999}
-    .panel header{background:#fafafa;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee}
-    .panel iframe{flex:1;border:0;width:100%}
-    .panel .close{background:#fff;border:1px solid #ddd;padding:6px 10px;border-radius:8px;cursor:pointer}
-    .hint{font-size:.85rem;color:#9aa0ad}
-    @media (max-width:600px){
-      .panel{position:fixed;left:8px;right:8px;bottom:8px;height:72vh}
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260602">
 </head>
 <body>
-  <header>
-    <div class="container"><h1>경주정보고 — 학교 도구 포털</h1></div>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        ![School Logo](assets/img/logo.webp)
+        <div class="brand-text">
+          <h1>경주정보고</h1>
+          <div class="subtitle">학교 도구 포털</div>
+        </div>
+      </div>
+      <nav class="top-right">
+        <a href="https://kim-young-seok-it.github.io/gjjb/" target="_blank" rel="noreferrer">홈</a>
+        <a href="#" onclick="alert('관리자: tools 배열을 수정해 도구를 업데이트하세요')">관리</a>
+      </nav>
+    </div>
+
+    <div class="hero">
+      ![Campus](assets/img/campus.gif)
+      <div class="hero-overlay">
+        <h2>학교 업무를 한 곳에서 — 공지 번역 · 생활기록 보조 · 교체수업 · 자소서 검증</h2>
+      </div>
+    </div>
   </header>
 
-  <main class="container">
-    <section class="grid" id="cards"></section>
+  <main class="wrap main-content">
+    <section id="cards" class="grid"></section>
 
-    <div class="footer">
-      <div class="hint">참고: 일부 서비스는 보안 설정(X-Frame-Options/CSP) 때문에 포털(iframe)에 임베드되지 않을 수 있습니다. 표시되지 않으면 'Open in New Tab'로 여세요.</div>
-    </div>
+    <p class="hint">참고: 일부 외부 서비스는 보안 설정 때문에 임베드(포털 내보기)가 불가능할 수 있습니다. 그럴 땐 "Open in New Tab"을 사용하세요.</p>
   </main>
 
-  <div class="panel" id="panel">
-    <header>
-      <div style="display:flex;gap:10px;align-items:center">
-        <strong id="panelTitle">포털 미리보기</strong>
-        <span style="color:var(--muted);font-size:.9rem"> — 임베드 차단 시 새 탭으로 여세요</span>
-      </div>
+  <div class="panel" id="panel" style="display:none;">
+    <header class="panel-head">
+      <strong id="panelTitle">미리보기</strong>
       <div>
-        <button class="close" id="openNewTab">Open in New Tab</button>
-        <button class="close" id="closePanel">Close</button>
+        <button id="openNewTab" class="btn small">Open in New Tab</button>
+        <button id="closePanel" class="btn small ghost">Close</button>
       </div>
     </header>
-    <iframe id="panelFrame" src=""></iframe>
+    <iframe id="panelFrame" src="" title="tool preview"></iframe>
   </div>
 
-  <script>
-    // 실제 서비스 URL 및 설명을 아래에 넣었습니다.
-    const tools = [
-      {
-        title: "가정통신문 번역기",
-        desc: "가정통신문 원문 틀 유지 → 영어 · 베트남어 · 러시아어 번역 (Streamlit)",
-        url: "https://school-notice-translator-nscnskwkygrcekpfbsgdfy.streamlit.app/"
-      },
-      {
-        title: "학생기록 AI — 세부능력 보조",
-        desc: "선생님 과목 특징에 맞춘 세부능력(생활기록부) 작성 보조 — 참고용 (Render)",
-        url: "https://school-record-ai.onrender.com/"
-      },
-      {
-        title: "수업교체 프로그램",
-        desc: "맞교환교사 · 보강교사 · 3자교환교사 탐색 (Google Apps Script)",
-        url: "https://script.google.com/macros/s/AKfycbxfX1fS1k0XMx3SAwdWbl2QWkAh9Pw9sy6e-eqjvpOWzXAMXFnlXyODuclPsFgK00yaEw/exec"
-      },
-      {
-        title: "자소서 검증 프로그램",
-        desc: "오타 검사 · 글자수 계산 · AI작성 감지(참고용) (Text Checker)",
-        url: "https://text-checker-1.onrender.com/"
-      }
-    ];
-
-    const cards = document.getElementById('cards');
-    const panel = document.getElementById('panel');
-    const panelFrame = document.getElementById('panelFrame');
-    const panelTitle = document.getElementById('panelTitle');
-    const closePanelBtn = document.getElementById('closePanel');
-    const openNewTabBtn = document.getElementById('openNewTab');
-
-    function makeCard(t){
-      const el = document.createElement('div');
-      el.className = 'card';
-      el.innerHTML = `<h3>${t.title}</h3><p>${t.desc}</p><div class="buttons">
-        <button class="open-portal">Open in Portal</button>
-        <button class="open-tab">Open in New Tab</button>
-      </div>`;
-      const [portalBtn, newTabBtn] = el.querySelectorAll('button');
-      portalBtn.addEventListener('click', ()=> openInPanel(t));
-      newTabBtn.addEventListener('click', ()=> window.open(t.url,'_blank'));
-      return el;
-    }
-
-    function openInPanel(tool){
-      panelTitle.textContent = tool.title;
-      panelFrame.src = tool.url;
-      panel.style.display = 'flex';
-      openNewTabBtn.onclick = ()=> window.open(tool.url,'_blank');
-
-      // 간단한 임베드 차단 감지(완전 정확하진 않음)
-      setTimeout(()=> {
-        try {
-          // cross-origin이면 access 시도에서 예외 발생
-          const doc = panelFrame.contentDocument;
-          if(!doc || doc.documentElement.innerHTML.trim().length === 0){
-            panelTitle.textContent = tool.title + " — (임베드 불가: 'Open in New Tab' 사용)";
-          }
-        } catch(e) {
-          panelTitle.textContent = tool.title + " — (임베드 차단 가능: 'Open in New Tab' 사용)";
-        }
-      },900);
-    }
-
-    closePanelBtn.addEventListener('click', ()=> {
-      panelFrame.src = '';
-      panel.style.display = 'none';
-      panelTitle.textContent = '포털 미리보기';
-    });
-
-    tools.forEach(t => cards.appendChild(makeCard(t)));
-  </script>
+  <script src="assets/js/app.js?v=20260602"></script>
 </body>
 </html>
->
