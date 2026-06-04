@@ -10,7 +10,6 @@
   <div class="wrap">
     <header class="header-inner" role="banner">
       <div class="brand">
-        <!-- Replace markdown image syntax with a proper img tag -->
         ![경주정보고 로고](assets/img/logo.webp)
         <div class="brand-text">
           <h1>경주정보고 School Tool Portal</h1>
@@ -24,26 +23,26 @@
       </nav>
     </header>
 
-    <!-- Hero: you can either use the <img> below or set a CSS background in assets/css/styles.css
-         If you prefer CSS background, remove the <img> and add:
-         .hero { background-image: url("../img/campus.gif"); } (when styles.css is in assets/css/) -->
+    <!-- HERO: 배경 이미지는 CSS에서 설정(반응형 + 오버레이) -->
     <section class="hero" aria-labelledby="hero-title">
-      ![캠퍼스 전경](assets/img/campus.gif)
       <div class="hero-overlay" id="hero-title">
         <h2>교직원 전용 포털 — 빠르고 안전한 학교업무 도구</h2>
+        <p class="lead">학교업무를 더 쉽게, 더 안전하게. 바로 아래 도구를 선택하세요.</p>
       </div>
     </section>
 
     <main class="main-content" role="main">
-      <div id="tools" class="grid" aria-live="polite"></div>
+      <div id="tools" class="grid" aria-live="polite">
+        <!-- 자바스크립트가 도구 카드를 여기에 렌더링합니다 -->
+      </div>
 
       <div class="hint" id="help">
-        사이트가 업데이트되지 않으면 Ctrl+F5로 강제 새로고침하세요. GitHub Pages 빌드 상태는 Actions 탭에서 확인하세요.
+        사이트가 업데이트되지 않으면 Ctrl+F5로 강제 새로고침하세요. GitHub Pages 배포 상태는 Actions 탭에서 확인하세요.
       </div>
     </main>
   </div>
 
-  <!-- Preview panel / iframe for tools -->
+  <!-- Preview panel (glassmorphism) -->
   <div id="previewPanel" class="panel" role="dialog" aria-label="포털 미리보기" aria-hidden="true" hidden>
     <div class="panel-head">
       <div style="display:flex;align-items:center;gap:10px">
@@ -58,9 +57,7 @@
     <iframe id="previewFrame" src="" title="도구 미리보기"></iframe>
   </div>
 
-  <noscript>
-    이 사이트는 JavaScript에 의존합니다. 브라우저에서 JavaScript를 활성화해 주세요.
-  </noscript>
+  <noscript>이 사이트는 JavaScript에 의존합니다. 브라우저에서 JavaScript를 활성화해 주세요.</noscript>
 
   <script src="assets/js/app.js"></script>
 </body>
