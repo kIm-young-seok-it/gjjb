@@ -1,79 +1,45 @@
+// 간단한 도구 카드 렌더러 (실제 도구 링크/iframe 주소는 여기에 연결)
 const tools = [
-  { id: 'notice', title: 'Notice Translator', desc: '공지사항 자동 번역', path: 'tools/notice-translator/index.html' },
-  { id: 'record-ai', title: 'Record AI', desc: '수업·행사 기록 요약', path: 'tools/record-ai/index.html' },
-  { id: 'class-replace', title: 'Class Replacement', desc: '대체 수업 관리', path: 'tools/class-replacement/index.html' },
-  { id: 'statement', title: 'Statement Checker', desc: '증명서/사유서 검토', path: 'tools/statement-checker/index.html' }
+  { id: 'notice', title: 'Notice Translator', desc: '공지 번역 도구', url: 'tools/notice-translator/index.html' },
+  { id: 'record', title: 'Record AI', desc: '출결/기록 자동화', url: 'tools/record-ai/index.html' },
+  { id: 'replace', title: 'Class Replacement', desc: '대체수업 관리', url: 'tools/class-replacement/index.html' },
+  { id: 'statement', title: 'Statement Checker', desc: '진술서 검토 도구', url: 'tools/statement-checker/index.html' },
 ];
 
-const toolsContainer = document.getElementById('tools');
-const previewPanel = document.getElementById('previewPanel');
-const previewFrame = document.getElementById('previewFrame');
-const panelTitle = document.getElementById('panelTitle');
-const panelSub = document.getElementById('panelSub');
-const closePanelBtn = document.getElementById('closePanel');
-const openNewTabBtn = document.getElementById('openNewTab');
-
 function createCard(tool){
-  const card = document.createElement('article');
-  card.className = 'card';
-  card.setAttribute('tabindex', '0');
-
-  const h3 = document.createElement('h3');
-  h3.textContent = tool.title;
-
-  const p = document.createElement('p');
-  p.textContent = tool.desc;
-
-  const btnWrap = document.createElement('div');
-  btnWrap.className = 'buttons';
-
-  const openBtn = document.createElement('button');
-  openBtn.className = 'btn open-portal';
-  openBtn.type = 'button';
-  openBtn.textContent = '포털 열기 (미리보기)';
-  openBtn.addEventListener('click', () => openPreview(tool));
-
-  const tabBtn = document.createElement('button');
-  tabBtn.className = 'btn open-tab';
-  tabBtn.type = 'button';
-  tabBtn.textContent = '새 탭에서 열기';
-  tabBtn.addEventListener('click', () => window.open(tool.path, '_blank', 'noopener'));
-
-  btnWrap.appendChild(openBtn);
-  btnWrap.appendChild(tabBtn);
-
-  card.appendChild(h3);
-  card.appendChild(p);
-  card.appendChild(btnWrap);
-
-  return card;
-}
-
-function renderCards(){
-  tools.forEach(tool => toolsContainer.appendChild(createCard(tool)));
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.innerHTML = `<h3>${tool.title}</h3><p>${tool.desc}</p>`;
+  const btn = document.createElement('button');
+  btn.textContent = 'Open Preview';
+  btn.className = 'btn ghost';
+  btn.onclick = () => openPreview(tool);
+  div.appendChild(btn);
+  return div;
 }
 
 function openPreview(tool){
-  previewFrame.src = tool.path;
-  panelTitle.textContent = tool.title;
-  panelSub.textContent = `열기: ${tool.path}`;
-  previewPanel.hidden = false;
-  previewPanel.setAttribute('aria-hidden', 'false');
-  openNewTabBtn.onclick = () => window.open(tool.path, '_blank', 'noopener');
-  closePanelBtn.focus();
+  const panel = document.getElementById('previewPanel');
+  const iframe = document.getElementById('previewFrame');
+  document.getElementById('panelTitle').textContent = tool.title;
+  iframe.src = tool.url;
+  panel.hidden = false; panel.setAttribute('aria-hidden','false');
 }
 
 function closePreview(){
-  previewFrame.src = '';
-  previewPanel.hidden = true;
-  previewPanel.setAttribute('aria-hidden', 'true');
+  const panel = document.getElementById('previewPanel');
+  const iframe = document.getElementById('previewFrame');
+  iframe.src = '';
+  panel.hidden = true; panel.setAttribute('aria-hidden','true');
 }
 
-closePanelBtn.addEventListener('click', closePreview);
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && previewPanel.getAttribute('aria-hidden') === 'false') {
-    closePreview();
-  }
-});
+document.addEventListener('DOMContentLoaded', ()=>{
+  const grid = document.getElementById('tools');
+  tools.forEach(t => grid.appendChild(createCard(t)));
 
-renderCards();
+  document.getElementById('closePanel').addEventListener('click', closePreview);
+  document.getElementById('openNewTab').addEventListener('click', ()=>{
+    const iframe = document.getElementById('previewFrame');
+    if(iframe.src) window.open(iframe.src,'_blank','noopener');
+  });
+});
